@@ -72,3 +72,45 @@ def assign_point_time(speeds_dict, points, br_transformed, track_id, time, toler
                     else:
                         speeds_dict[track_id]['delta45'] = delta 
                         speeds_dict[track_id]['speed45'] = section_speed
+
+def assign_point_frames(speeds_dict, points, br_transformed, track_id, frame_number, tolerance):
+    for point in points.items():
+            
+        point_name = point[0]
+        point_y_coord = point[1][1]
+        previous_point_name = 'P'+str(int(point_name[1])-1)
+        offset = 0
+        first_time_here = False    
+        
+        if point_name == 'P1':
+            offset = 10
+        
+        if br_transformed[1] >= point_y_coord-(tolerance+offset) and br_transformed[1] <= point_y_coord+tolerance:
+            if speeds_dict[track_id][point_name] == 0:
+                speeds_dict[track_id][point_name] = frame_number
+                first_time_here = True
+                
+        if point_name != 'P1' and first_time_here:
+            fnumber_at_prev = speeds_dict[track_id][previous_point_name]
+            
+            if fnumber_at_prev != 0:
+                frame_delta = frame_number - fnumber_at_prev
+                time_delta = frame_delta/50
+                section_speed = round((7/time_delta)*3.6, 3)
+                
+                if previous_point_name == 'P1':
+                    speeds_dict[track_id]['delta12'] = time_delta
+                    speeds_dict[track_id]['speed12'] = section_speed
+                                    
+                elif previous_point_name == 'P2':
+                    speeds_dict[track_id]['delta23'] = time_delta
+                    speeds_dict[track_id]['speed23'] = section_speed
+                                        
+                elif previous_point_name == 'P3':
+                    speeds_dict[track_id]['delta34'] = time_delta
+                    speeds_dict[track_id]['speed34'] = section_speed
+
+                else:
+                    speeds_dict[track_id]['delta45'] = time_delta 
+                    speeds_dict[track_id]['speed45'] = section_speed
+        
