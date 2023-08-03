@@ -2,7 +2,7 @@
 
 This is a set of computer vision systems for detecting car speeds from video footage, currently from the BrnoCompSpeed dataset.
 
-The first model, in the speed_funcs.py file, uses YOLOv5 as its detection model, followed by deepSORT for tracking the cars.
+The first model, in the speed.ipynb file, uses YOLOv5 as its detection model, followed by deepSORT for tracking the cars.
 
 The second model, in the v8track.py file, uses YOLOv8 with native bytetrack tracking.
 
