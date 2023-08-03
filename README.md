@@ -1,12 +1,15 @@
 # cv-radar
 
-This is a computer vision system for detecting car speeds from video footage, currently from the BrnoCompSpeed dataset. This is a "tracking by detection model".
+This is a set of computer vision systems for detecting car speeds from video footage, currently from the BrnoCompSpeed dataset.
 
-The program uses YOLOv5 as its detection model, followed by deepSORT to track the cars.
+The first model, in the speed_funcs.py file, uses YOLOv5 as its detection model, followed by deepSORT for tracking the cars.
 
+The second model, in the v8track.py file, uses YOLOv8 with native bytetrack tracking.
+
+The third model, in the strongsort_speed.py file, uses YOLOv8 for detection and StrongSORT for tracking.
 ## Requirements
 
-Python, Jupyter Kernel, opencv-python, torch, deep_sort_realtime
+Python, Jupyter Kernel, opencv-python, torch, ultralytics deep_sort_realtime, strongsort-pip 
 
 ## Dataset
 

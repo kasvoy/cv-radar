@@ -17,13 +17,10 @@ def main():
         'P5': [851, 956]
     }
     
-    section_length = 7
     total_length = 28
-    len25 = 21
     speeds_dict = dict()
     speed_limit = 80
-    
-    
+
     for result in model.track(source=video_path, show=False, stream=True, tracker='bytetrack.yaml', classes=[1, 2, 3, 5, 6, 7, 8]):
             
         frame = extract_roi(result.orig_img)
@@ -81,15 +78,12 @@ def main():
                 cv2.putText(frame, text, (int(bbox_coords[0])+300, int(bbox_coords[1])), cv2.FONT_HERSHEY_SIMPLEX, 1, color_avg_speed, 2)
             
             
-            
             txt = f"ID: {track_id}, speed: {current_speed}"
             bbox_color = (0,255,0)
             
             if current_speed > speed_limit:
                 bbox_color = (0,0,255)
-            
-                
-            
+             
             cv2.rectangle(frame, (int(bbox_coords[0]), int(bbox_coords[1])), (int(bbox_coords[2]), int(bbox_coords[3])), bbox_color, 1)
             cv2.putText(frame, txt, (int(bbox_coords[0]), int(bbox_coords[1])), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1)
 
@@ -103,6 +97,9 @@ def main():
             break
         if key & 0xFF == ord('p'):
             cv2.waitKey(-1)
+            
+    for car in speeds_dict.items():
+        print(f"CAR: {car[0]}, average_speed: {car[1]['avg_speed']}")
 
 if __name__ == '__main__':
     main()

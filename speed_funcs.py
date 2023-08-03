@@ -113,4 +113,11 @@ def assign_point_frames(speeds_dict, points, br_transformed, track_id, frame_num
                 else:
                     speeds_dict[track_id]['delta45'] = time_delta 
                     speeds_dict[track_id]['speed45'] = section_speed
-        
+
+
+def display_video_time(current_time, frame):
+    current_time_trunc = float('{:.2f}'.format(current_time))
+
+    text = f"Video time: {current_time_trunc}"
+
+    cv2.putText(frame, text, (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, 2)
