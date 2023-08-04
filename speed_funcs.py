@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import time
 
 """
 br = [1598, 967]
@@ -22,6 +23,8 @@ TRANSFORM_MATRIX = np.array([[     1.5617,      4.1251,     -435.51],
                             [  0.0035754,      4.6042,     -314.34],
                             [  5.959e-05,   0.0033356,           1]])
 
+total_length = 28
+
 #ROI includes only the lanes going in direction of the camera
 def extract_roi(frame):
     return frame[:, :1450] 
@@ -32,7 +35,7 @@ def get_point_under_transform(pt, transform_matrix):
 
 
 #add an entry to the dictionary which cars crossed which points at what times - changes state of dictionary
-def assign_point_time(speeds_dict, points, br_transformed, track_id, time, tolerance):
+def assign_point_time(speeds_dict, points, br_transformed, track_id, vid_time, tolerance):
     
     for point in points.items():
         
@@ -47,14 +50,14 @@ def assign_point_time(speeds_dict, points, br_transformed, track_id, time, toler
             
         if br_transformed[1] >= point_y_coord-(tolerance+offset) and br_transformed[1] <= point_y_coord+tolerance:
             if speeds_dict[track_id][point_name] == 0:
-                speeds_dict[track_id][point_name] = time
+                speeds_dict[track_id][point_name] = vid_time
                 first_time_here = True
             
             if point_name != 'P1' and first_time_here:
                 time_at_prev = speeds_dict[track_id][previous_point_name]
                 
                 if time_at_prev != 0:
-                    delta = round(time - time_at_prev, 3)
+                    delta = round(vid_time - time_at_prev, 3)
                     section_speed = round((7/delta)*3.6, 3)
                     
                     if previous_point_name == 'P1':
@@ -72,7 +75,7 @@ def assign_point_time(speeds_dict, points, br_transformed, track_id, time, toler
                     else:
                         speeds_dict[track_id]['delta45'] = delta 
                         speeds_dict[track_id]['speed45'] = section_speed
-
+                        
 def assign_point_frames(speeds_dict, points, br_transformed, track_id, frame_number, tolerance):
     for point in points.items():
             
@@ -120,4 +123,9 @@ def display_video_time(current_time, frame):
 
     text = f"Video time: {current_time_trunc}"
 
-    cv2.putText(frame, text, (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, 2)
+    cv2.putText(frame, text, (200, 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+    
+def display_avgspeed_text(frame, text, color, pos):
+    cv2.putText(frame, text, pos, cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
+    
+    

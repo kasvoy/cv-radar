@@ -47,8 +47,7 @@ def main():
                     'speed12': 0,'speed23': 0, 'speed34': 0, 'speed45': 0, 'avg_speed': 0}
             
             assign_point_frames(speeds_dict, points, br_transformed, track_id, frame_number, tolerance=10)
-            
-            avg_speed_kph = speeds_dict[track_id]['avg_speed']
+
             section_speeds = list(speeds_dict[track_id].values())[10:14]
             current_speed = section_speeds[0]
             
@@ -69,13 +68,13 @@ def main():
                 
                 speeds_dict[track_id]['avg_speed'] = round((total_length/total_delta) * 3.6, 3)
                 
-                text = f"average speed: {avg_speed_kph}"
+                text = f"average speed: {speeds_dict[track_id]['avg_speed']}"
                 color_avg_speed = (255,255,255)
                 
-                if avg_speed_kph > speed_limit:
+                if speeds_dict[track_id]['avg_speed'] > speed_limit:
                     color_avg_speed = (0,0,255)
                 
-                cv2.putText(frame, text, (int(bbox_coords[0])+300, int(bbox_coords[1])), cv2.FONT_HERSHEY_SIMPLEX, 1, color_avg_speed, 2)
+                cv2.putText(frame, text, (int(bbox_coords[0]), int(bbox_coords[1])-60), cv2.FONT_HERSHEY_SIMPLEX, 1, color_avg_speed, 2)
             
             
             txt = f"ID: {track_id}, speed: {current_speed}"
@@ -87,7 +86,7 @@ def main():
             cv2.rectangle(frame, (int(bbox_coords[0]), int(bbox_coords[1])), (int(bbox_coords[2]), int(bbox_coords[3])), bbox_color, 1)
             cv2.putText(frame, txt, (int(bbox_coords[0]), int(bbox_coords[1])), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 1)
 
-
+        cv2.putText(frame, f"SPEED LIMIT: {speed_limit}km/h", (200,250), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
         cv2.imshow("yolov8", frame)
         frame_number += 1
         
