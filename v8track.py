@@ -68,7 +68,7 @@ def main():
                 
                 speeds_dict[track_id]['avg_speed'] = round((total_length/total_delta) * 3.6, 3)
                 
-                text = f"average speed: {speeds_dict[track_id]['avg_speed']}"
+                text = f"average speed: {speeds_dict[track_id]['avg_speed']}km/h"
                 color_avg_speed = (255,255,255)
                 
                 if speeds_dict[track_id]['avg_speed'] > speed_limit:
@@ -77,7 +77,7 @@ def main():
                 cv2.putText(frame, text, (int(bbox_coords[0]), int(bbox_coords[1])-60), cv2.FONT_HERSHEY_SIMPLEX, 1, color_avg_speed, 2)
             
             
-            txt = f"ID: {track_id}, speed: {current_speed}"
+            txt = f"{track_id}, speed: {current_speed}km/h"
             bbox_color = (0,255,0)
             
             if current_speed > speed_limit:
@@ -96,9 +96,6 @@ def main():
             break
         if key & 0xFF == ord('p'):
             cv2.waitKey(-1)
-            
-    for car in speeds_dict.items():
-        print(f"CAR: {car[0]}, average_speed: {car[1]['avg_speed']}")
 
 if __name__ == '__main__':
     main()
